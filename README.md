@@ -8,7 +8,7 @@ This OCR pipeline takes documents (images or PDFs) and extracts structured text 
 
 ```
 ┌─────────┐    ┌──────────────┐    ┌────────────┐    ┌─────────┐    ┌────────────┐
-│  INPUT  │───▶│ PREPROCESS  │───▶│   DETECT   │───▶│   OCR   │───▶│  OUTPUT    │
+│  INPUT  │─── │ PREPROCESS   │─── │   DETECT   │─── │   OCR   │─── │  OUTPUT    │
 │  LAYER  │    │    STAGE     │    │   STAGE    │    │   STAGE │    │   LAYER    │
 └─────────┘    └──────────────┘    └────────────┘    └─────────┘    └────────────┘
 ```
@@ -286,3 +286,4 @@ Built with:
 - Google Gemini Vision - OCR
 - pdf2image - PDF conversion
 - Pillow - Image handling
+
