@@ -9,6 +9,14 @@ from pathlib import Path
 from dataclasses import dataclass
 from typing import Optional
 
+# Load environment variables from .env file
+try:
+    from dotenv import load_dotenv
+    env_path = Path(__file__).parent / ".env"
+    load_dotenv(env_path)
+except ImportError:
+    pass  # python-dotenv not installed, will use system env vars
+
 
 @dataclass
 class GeminiConfig:
