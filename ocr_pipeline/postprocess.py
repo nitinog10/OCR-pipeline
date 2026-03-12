@@ -11,7 +11,7 @@ Cleans and structures OCR output using:
 import re
 import json
 import logging
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Union
 from dataclasses import dataclass
 from collections import defaultdict
 
