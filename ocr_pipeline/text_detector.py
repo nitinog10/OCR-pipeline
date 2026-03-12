@@ -432,4 +432,3 @@ def detect_text_regions(
 
     detector = TextDetector(config)
     return detector.detect(image)
-    
