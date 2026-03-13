@@ -1,3 +1,4 @@
+```
 """
 Text Detection Module for OCR Pipeline.
 
@@ -15,7 +16,8 @@ from dataclasses import dataclass
 import logging
 import os
 
-from config import TextDetectorConfig, get_config
+from ocr_pipeline.config import TextDetectorConfig, get_config
+from ocr_pipeline.utils import merge_regions, draw_regions, crop_region
 
 logger = logging.getLogger(__name__)
 
@@ -201,7 +203,7 @@ class TextDetector:
                 ))
 
         # Merge overlapping regions
-        regions = self._merge_overlapping_regions(regions)
+        regions = merge_regions(regions)
 
         logger.info(f"Final text regions after merging: {len(regions)}")
         return regions
@@ -295,117 +297,6 @@ class TextDetector:
 
         return regions
 
-    def _merge_overlapping_regions(self, regions: List[TextRegion]) -> List[TextRegion]:
-        """
-        Merge overlapping text regions.
-
-        Args:
-            regions: List of detected regions.
-
-        Returns:
-            List of merged regions.
-        """
-        if not regions:
-            return []
-
-        # Sort by y-coordinate (top to bottom)
-        regions = sorted(regions, key=lambda r: r.y)
-
-        merged = [regions[0]]
-
-        for region in regions[1:]:
-            last = merged[-1]
-
-            # Check if current region overlaps or is close to last
-            x_overlap = region.x <= last.x + last.w + 10
-            y_overlap = abs(region.y - last.y) < last.h * 0.5
-
-            if x_overlap and y_overlap:
-                # Merge by expanding bounding box
-                new_x = min(last.x, region.x)
-                new_y = min(last.y, region.y)
-                new_w = max(last.x + last.w, region.x + region.w) - new_x
-                new_h = max(last.y + last.h, region.y + region.h) - new_y
-
-                merged[-1] = TextRegion(
-                    bbox=(new_x, new_y, new_w, new_h),
-                    confidence=(last.confidence + region.confidence) / 2
-                )
-            else:
-                merged.append(region)
-
-        return merged
-
-    def crop_region(
-        self,
-        image: np.ndarray,
-        region: TextRegion,
-        padding: int = 5
-    ) -> np.ndarray:
-        """
-        Crop a region from the image.
-
-        Args:
-            image: Source image.
-            region: Text region to crop.
-            padding: Padding to add around the region.
-
-        Returns:
-            Cropped image region.
-        """
-        h, w = image.shape[:2]
-
-        # Apply padding while staying within image bounds
-        x1 = max(0, region.x - padding)
-        y1 = max(0, region.y - padding)
-        x2 = min(w, region.x + region.w + padding)
-        y2 = min(h, region.y + region.h + padding)
-
-        return image[y1:y2, x1:x2]
-
-    def draw_regions(
-        self,
-        image: np.ndarray,
-        regions: List[TextRegion],
-        show_confidence: bool = True
-    ) -> np.ndarray:
-        """
-        Draw bounding boxes around detected text regions.
-
-        Args:
-            image: Source image.
-            regions: List of text regions.
-            show_confidence: Whether to show confidence scores.
-
-        Returns:
-            Image with drawn bounding boxes.
-        """
-        result = image.copy()
-
-        for i, region in enumerate(regions):
-            x, y, w, h = region.bbox
-            color = (0, 255, 0)  # Green
-
-            # Draw rectangle
-            cv2.rectangle(result, (x, y), (x + w, y + h), color, 2)
-
-            # Add label
-            label = f"Text {i+1}"
-            if show_confidence:
-                label += f" ({region.confidence:.2f})"
-
-            cv2.putText(
-                result,
-                label,
-                (x, y - 5),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                0.5,
-                color,
-                1
-            )
-
-        return result
-
 
 def detect_text_regions(
     image: np.ndarray,
@@ -432,3 +323,4 @@ def detect_text_regions(
 
     detector = TextDetector(config)
     return detector.detect(image)
+```

@@ -1,3 +1,4 @@
+```
 """
 Utility functions for OCR Pipeline.
 
@@ -428,3 +429,4 @@ def calculate_file_hash(path: Union[str, Path]) -> str:
             hasher.update(chunk)
 
     return hasher.hexdigest()
+```

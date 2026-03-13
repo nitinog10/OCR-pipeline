@@ -1,3 +1,4 @@
+```python
 """
 Configuration file for OCR Pipeline.
 
@@ -9,7 +10,7 @@ from pathlib import Path
 from dataclasses import dataclass
 from typing import Optional
 
-# Load environment variables from .env file
+# Load environment variables from.env file
 try:
     from dotenv import load_dotenv
     env_path = Path(__file__).parent / ".env"
@@ -17,6 +18,7 @@ try:
 except ImportError:
     pass  # python-dotenv not installed, will use system env vars
 
+from ocr_pipeline.utils import create_directory
 
 @dataclass
 class GeminiConfig:
@@ -30,7 +32,6 @@ class GeminiConfig:
     def __post_init__(self):
         if not self.api_key:
             self.api_key = os.getenv("GEMINI_API_KEY", "")
-
 
 @dataclass
 class PreprocessingConfig:
@@ -59,7 +60,6 @@ class PreprocessingConfig:
     target_dpi: int = 300
     max_dimension: int = 4000
 
-
 @dataclass
 class TextDetectorConfig:
     """Configuration for text detection."""
@@ -77,7 +77,6 @@ class TextDetectorConfig:
 
     # EAST model path (if using EAST)
     east_model_path: str = "frozen_east_text_detection.pb"
-
 
 @dataclass
 class OCRConfig:
@@ -97,7 +96,6 @@ class OCRConfig:
     # Quality settings
     image_quality: int = 95
     min_confidence: float = 0.5
-
 
 @dataclass
 class PostProcessConfig:
@@ -123,7 +121,6 @@ class PostProcessConfig:
     extract_emails: bool = True
     extract_phones: bool = True
 
-
 @dataclass
 class PipelineConfig:
     """Main pipeline configuration."""
@@ -131,33 +128,25 @@ class PipelineConfig:
     output_dir: Path = Path("output")
 
     # Component configurations
-    gemini: GeminiConfig = None
-    preprocessing: PreprocessingConfig = None
-    text_detector: TextDetectorConfig = None
-    ocr: OCRConfig = None
-    postprocess: PostProcessConfig = None
+    gemini: GeminiConfig = GeminiConfig()
+    preprocessing: PreprocessingConfig = PreprocessingConfig()
+    text_detector: TextDetectorConfig = TextDetectorConfig()
+    ocr: OCRConfig = OCRConfig()
+    postprocess: PostProcessConfig = PostProcessConfig()
 
     # Supported formats
     supported_image_formats: tuple = ("jpg", "jpeg", "png", "bmp", "tiff", "webp")
     supported_document_formats: tuple = ("pdf",)
 
-    def __init__(self):
-        self.gemini = GeminiConfig()
-        self.preprocessing = PreprocessingConfig()
-        self.text_detector = TextDetectorConfig()
-        self.ocr = OCRConfig()
-        self.postprocess = PostProcessConfig()
-        self.output_dir.mkdir(exist_ok=True, parents=True)
-
+    def __post_init__(self):
+        create_directory(self.output_dir)
 
 # Global configuration instance
 config = PipelineConfig()
 
-
 def get_config() -> PipelineConfig:
     """Get the global pipeline configuration."""
     return config
-
 
 def validate_config() -> bool:
     """Validate the configuration settings."""
@@ -169,8 +158,9 @@ def validate_config() -> bool:
 
     # Check output directory
     try:
-        cfg.output_dir.mkdir(exist_ok=True, parents=True)
+        create_directory(cfg.output_dir)
     except Exception as e:
         print(f"Warning: Could not create output directory: {e}")
 
     return True
+```
