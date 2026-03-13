@@ -1,3 +1,4 @@
+```
 """
 Gemini OCR Module for OCR Pipeline.
 
@@ -21,10 +22,13 @@ import numpy as np
 import google.generativeai as genai
 from google.api_core import exceptions as google_exceptions
 
-from config import GeminiConfig, OCRConfig, get_config
-from text_detector import TextRegion
+from ocr_pipeline.config import GeminiConfig, OCRConfig, get_config
+from ocr_pipeline.text_detector import TextRegion
+from ocr_pipeline.utils import setup_logging
 
 logger = logging.getLogger(__name__)
+
+setup_logging()
 
 
 @dataclass
@@ -77,7 +81,6 @@ class GeminiOCR:
         """Setup Gemini API client."""
         if not self.gemini_config.api_key:
             # Try to get from environment
-            import os
             api_key = os.environ.get("GEMINI_API_KEY")
             if not api_key:
                 raise ValueError(
@@ -486,10 +489,11 @@ def extract_text_from_image(
         return ocr.extract_text_from_regions(image, regions)
     elif use_regions:
         # Need to detect regions first
-        from text_detector import TextDetector
+        from ocr_pipeline.text_detector import TextDetector
         detector = TextDetector()
         detected_regions = detector.detect(image)
         return ocr.extract_text_from_regions(image, detected_regions)
     else:
         # Process entire image
         return ocr.extract_full_image_text(image)
+```
