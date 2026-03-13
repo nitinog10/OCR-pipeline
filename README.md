@@ -687,3 +687,10 @@ None
 - The `load_document` function raises a `ValueError` if the file format is unsupported.
 - The `save_ocr_results` function supports saving results in JSON and text formats.
 
+## Code Improvements Applied
+
+- Break circular dependency cycles (`ocr_pipeline/__init__.py`) to reduce cascading risk.
+- Add regression tests around the highest-risk files: `ocr_pipeline/config.py`, `ocr_pipeline/text_detector.py`, `ocr_pipeline/gemini_ocr.py`.
+- Consider extracting shared utility code into a dedicated module to lower coupling.
+- The dependency graph is not a DAG — refactoring toward a DAG structure improves build predictability.
+- Re-index and regenerate walkthroughs/diagrams after structural changes to keep documentation current.
