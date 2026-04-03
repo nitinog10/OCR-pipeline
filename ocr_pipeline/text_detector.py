@@ -1,3 +1,4 @@
+```
 """
 Text Detection Module for OCR Pipeline.
 
@@ -322,3 +323,4 @@ def detect_text_regions(
 
     detector = TextDetector(config)
     return detector.detect(image)
+```
