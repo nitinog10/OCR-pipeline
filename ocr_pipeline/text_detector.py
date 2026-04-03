@@ -1,4 +1,3 @@
-```
 """
 Text Detection Module for OCR Pipeline.
 
@@ -238,7 +237,7 @@ class TextDetector:
 
         # Forward pass
         self.east_model.setInput(blob)
-        scores, geometry = self.east_model.forward(["feature_fusion/Conv_7/Sigmoid", "feature_fronfusion/concat_3"])
+        scores, geometry = self.east_model.forward(["feature_fusion/Conv_7/Sigmoid", "feature_fusion/concat_3"])
 
         # Decode detections
         regions = self._decode_east_detections(scores, geometry)
@@ -323,4 +322,3 @@ def detect_text_regions(
 
     detector = TextDetector(config)
     return detector.detect(image)
-```
