@@ -679,3 +679,15 @@ This file provides utility functions and classes for common tasks in the OCR Pip
 - `FileUtils.get_output_path` generates an output path based on input path, output directory, and optional suffix and extension.
 - `JSONUtils` provides simple methods for saving and loading JSON files.
 
+## Code Improvements Applied
+
+- Break circular dependency cycles (`ocr_pipeline/__init__.py`) to reduce cascading risk.
+- Add regression tests around the highest-risk files: `ocr_pipeline/utils.py`, `ocr_pipeline/config.py`, `ocr_pipeline/text_detector.py`.
+- Consider extracting shared utility code into a dedicated module to lower coupling.
+- The dependency graph is not a DAG — refactoring toward a DAG structure improves build predictability.
+- Re-index and regenerate walkthroughs/diagrams after structural changes to keep documentation current.
+
+Files changed:
+- `ocr_pipeline/__init__.py`
+- `ocr_pipeline/utils.py`
+- `ocr_pipeline/text_detector.py`
