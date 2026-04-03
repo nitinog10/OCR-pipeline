@@ -18,12 +18,12 @@ Usage:
     result = pipeline.process_file("document.pdf", "output.json")
 """
 
-from.config import get_config, PipelineConfig
-from.preprocess import ImagePreprocessor
-from.text_detector import TextDetector, TextRegion
-from.gemini_ocr import GeminiOCR, OCRResult
-from.postprocess import TextPostProcessor, StructuredOutput
-from.utils import shared_utility_function
+from ocr_pipeline.config import get_config, PipelineConfig
+from ocr_pipeline.preprocess import ImagePreprocessor
+from ocr_pipeline.text_detector import TextDetector, TextRegion
+from ocr_pipeline.gemini_ocr import GeminiOCR, OCRResult
+from ocr_pipeline.postprocess import TextPostProcessor, StructuredOutput
+from ocr_pipeline.utils import shared_utility_function
 
 __version__ = "1.0.0"
 __author__ = "OCR Pipeline Team"
