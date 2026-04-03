@@ -691,3 +691,16 @@ Files changed:
 - `ocr_pipeline/__init__.py`
 - `ocr_pipeline/utils.py`
 - `ocr_pipeline/text_detector.py`
+
+## Code Improvements Applied
+
+- Break circular dependency cycles (`ocr_pipeline/__init__.py`) to reduce cascading risk.
+- Add regression tests around the highest-risk files: `ocr_pipeline/utils.py`, `ocr_pipeline/config.py`, `ocr_pipeline/text_detector.py`.
+- Consider extracting shared utility code into a dedicated module to lower coupling.
+- The dependency graph is not a DAG — refactoring toward a DAG structure improves build predictability.
+- Re-index and regenerate walkthroughs/diagrams after structural changes to keep documentation current.
+
+Files changed:
+- `ocr_pipeline/__init__.py`
+- `ocr_pipeline/utils.py`
+- `ocr_pipeline/text_detector.py`
