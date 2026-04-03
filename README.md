@@ -4,48 +4,59 @@
 
 ## Overview
 
-The `repo_8cffeb742e2f` repository is designed to provide a comprehensive Optical Character Recognition (OCR) pipeline, aimed at automating the extraction and processing of text from images. The primary purpose of this project is to facilitate the conversion of printed or handwritten text within images into machine-encoded text, enabling further analysis and utilization. This OCR pipeline is particularly useful for digitizing documents, automating data entry, and enhancing text-based searches within image datasets.
+The `repo_8c7f898cee3f` repository contains an Optical Character Recognition (OCR) pipeline designed to extract text from images and PDF documents. The pipeline is structured into several modules, each handling specific tasks such as image preprocessing, text detection, OCR processing, and post-processing. The main components are orchestrated in `main.py`, which serves as the entry point for the pipeline.
 
-The technology stack employed in this repository includes Python as the primary programming language, leveraging several key libraries and frameworks such as OpenCV for image processing, Tesseract for OCR capabilities, and Flask for creating a web-based application interface. Additionally, the project utilizes configuration management through a dedicated `config.py` file, ensuring flexibility and ease of maintenance.
+The tech stack includes Python for scripting, Google's Gemini Vision API for OCR functionality, and Streamlit for the user interface in `rag_app.py`. The pipeline relies on several utility functions and classes defined in `utils.py` to handle common tasks. Dependencies are listed in `requirements.txt` to ensure all necessary packages are installed.
 
-The high-level architecture of the OCR pipeline consists of several modular components, each responsible for specific tasks within the pipeline. The `preprocess.py` module handles initial image preprocessing, enhancing the quality of the input images for optimal OCR results. The `text_detector.py` module identifies and extracts text regions from the images. The `gemini_ocr.py` module applies OCR algorithms to convert the extracted text regions into machine-readable text. Post-processing is managed by the `postprocess.py` module, which cleans and structures the OCR output for better usability. The `rag_app.py` module provides a Retrieval-Augmented Generation application interface, allowing users to interact with the OCR results. Utility functions and classes are centralized in the `utils.py` file to support various pipeline operations.
+The pipeline begins with `preprocess.py`, which prepares images for OCR by handling various preprocessing tasks. `text_detector.py` identifies regions of text within the images. The core OCR functionality is implemented in `gemini_ocr.py`, which extracts text using the Gemini Vision API. Finally, `postprocess.py` cleans and structures the extracted text.
 
-The intended audience for this repository includes data scientists, machine learning engineers, and developers interested in implementing OCR solutions within their projects. The modular design and comprehensive documentation make it accessible for both novice and experienced practitioners looking to integrate OCR capabilities into their applications.
+This project is intended for users who need to automate the extraction of text from documents, such as scanned pages or PDFs. It provides a streamlined process from image input to structured text output, making it useful for document digitization, data entry automation, and text mining applications.
 
 ## Architecture
 
 ```markdown
-### Layers / Modules
+### Codebase Architecture Overview
 
-The OCR Pipeline is structured into several key modules, each responsible for a specific part of the OCR process:
+The `ocr_pipeline` codebase is structured to facilitate a modular and scalable Optical Character Recognition (OCR) system. Below is a detailed breakdown of how the code is organized, the data flow through the system, key design patterns used, and the main entry points.
 
-- **`config.py`**: Contains configuration settings for the pipeline.
-- **`gemini_ocr.py`**: Implements the core OCR functionality using the Gemini model.
-- **`main.py`**: The entry point of the application, orchestrating the OCR process.
-- **`postprocess.py`**: Handles the cleaning and structuring of the OCR output.
-- **`preprocess.py`**: Prepares the input images for the OCR process.
-- **`rag_app.py`**: Likely integrates a Retrieval-Augmented Generation (RAG) approach for enhanced text processing.
-- **`text_detector.py`**: Detects text regions within images before OCR processing.
-- **`utils.py`**: Provides utility functions and classes supporting the pipeline.
+#### Organization and Modules
 
-### Data Flow
+The codebase is organized into several key modules, each responsible for a specific part of the OCR process:
 
-1. **Input**: Images containing text are input into the pipeline.
-2. **Preprocessing**: The `preprocess.py` module prepares the images, possibly by normalizing, resizing, or enhancing them.
-3. **Text Detection**: The `text_detector.py` module identifies text regions within the images.
-4. **OCR Processing**: The `gemini_ocr.py` module applies the Gemini OCR model to extract text from the detected regions.
-5. **Postprocessing**: The `postprocess.py` module cleans and structures the extracted text.
-6. **Output**: The final, structured text output is produced.
+- **`__init__.py`**: Initializes the `ocr_pipeline` package, providing an overview of the module.
+- **`config.py`**: Contains configuration settings and parameters for the OCR pipeline.
+- **`gemini_ocr.py`**: Implements the core OCR functionality using Google's Gemini Vision API.
+- **`main.py`**: The main entry point for the OCR pipeline, orchestrating the complete OCR process.
+- **`postprocess.py`**: Post-processes OCR results to clean and structure the extracted text.
+- **`preprocess.py`**: Contains the image preprocessing module for the OCR pipeline.
+- **`rag_app.py`**: Implements a Streamlit app for a document Q&A system.
+- **`requirements.txt`**: Lists the dependencies required to run the OCR pipeline.
+- **`text_detector.py`**: Handles text detection within images.
+- **`utils.py`**: Provides utility functions and classes for common tasks in the OCR pipeline.
 
-### Key Design Patterns
+#### Data Flow
 
-- **Modular Design**: Each stage of the OCR process is encapsulated in its own module, promoting reusability and maintainability.
-- **Configuration Management**: The `config.py` module centralizes configuration settings, making it easy to adjust parameters without modifying code.
-- **Utility Functions**: The `utils.py` module provides common functions and classes, reducing code duplication across modules.
+The data flows through the system in the following manner:
 
-### Entry Points
+1. **Image Input**: The process begins with an input image, which is passed to the `preprocess.py` module.
+2. **Preprocessing**: The image is preprocessed to enhance text detection and recognition. This includes operations like resizing, normalization, and noise reduction.
+3. **Text Detection**: The preprocessed image is then passed to `text_detector.py` to identify regions of text within the image.
+4. **OCR Processing**: The detected text regions are sent to `gemini_ocr.py` for OCR processing using the Gemini Vision API.
+5. **Postprocessing**: The raw OCR results are cleaned and structured in `postprocess.py` to produce a final, readable text output.
+6. **Output**: The structured text is then available for further use, such as in the Streamlit app implemented in `rag_app.py`.
 
-- **`main.py`**: The primary entry point for running the OCR pipeline. It initializes the configuration, calls the preprocessing, text detection, OCR processing, and postprocessing modules in sequence, and outputs the final result.
+#### Key Design Patterns
+
+- **Modular Design**: The codebase is divided into distinct modules, each handling a specific part of the OCR process. This allows for easier maintenance and scalability.
+- **Configuration Management**: Configuration settings are centralized in `config.py`, making it easy to adjust parameters without modifying the core logic.
+- **Utility Functions**: Common tasks and helper functions are consolidated in `utils.py`, promoting code reuse and reducing duplication.
+
+#### Main Entry Points
+
+- **`main.py`**: This is the primary entry point for running the OCR pipeline. It coordinates the flow of data through the various modules.
+- **`rag_app.py`**: This file serves as the entry point for the Streamlit app, allowing users to interact with the OCR system through a web interface.
+
+Understanding this architecture will help you navigate the codebase effectively and make informed decisions when adding new features or making modifications.
 ```
 
 ## Folder Structure
@@ -76,7 +87,11 @@ No dependency manifest found.
 
 #### Overview
 
-# OCR Pipeline
+# nitinog10/OCR-pipeline — Documentation
+
+#### Overview
+
+The `repo_8cffeb742e2f` repository provides a comprehensive Optical Character Recognition (OCR) pipeline designed to automate the extraction and processing of text from images. This project aims to convert printed or handwritten text within images into machine-encoded text, facilitating digitizing documents, automating data entry, and enhancing text-based searches within image datasets.
 
 #### Module Overview
 
@@ -91,58 +106,6 @@ This file provides comprehensive documentation for the OCR (Optical Character Re
 - Google Gemini Vision API
 - pyspellchecker (optional)
 - Poppler (for PDF support)
-
-#### Classes
-
-| Class | Purpose | Key Methods |
-| --- | --- | --- |
-| `OCRPipeline` | Main pipeline class | `process_file()` |
-| `ImagePreprocessor` | Image preprocessing | `preprocess()` |
-| `TextDetector` | Text region detection | `detect()` |
-| `GeminiOCR` | OCR using Gemini Vision | `extract_text_from_regions()` |
-
-#### Functions
-
-| Function | Parameters | Returns | Description |
-| --- | --- | --- | --- |
-| `main()` | `args` (command-line arguments) | None | Entry point for command-line usage |
-| `process_file()` | `file_path`, `output_path` | `dict` | Processes a document and returns results |
-
-#### Configuration
-
-Configuration settings are stored in `config.py`. Key configurations include:
-- Gemini API settings (`model_name`, `temperature`)
-- Preprocessing options (`use_grayscale`, `enhance_contrast`)
-- Text detection method (`method`, `min_text_height`)
-- OCR processing settings (`batch_size`, `use_batching`, `enable_caching`)
-- Post-processing options (`extract_dates`, `extract_emails`)
-
-#### Notes / Edge Cases
-
-- Ensure Poppler is installed and added to PATH for PDF support.
-- Set the `GEMINI_API_KEY` environment variable or pass it as a command-line argument.
-- For complex document layouts, consider using the `east` text detection method.
-- Adjust `batch_size` in `config.py` if rate-limited by the Gemini API.
-
-### ocr_pipeline/README.md
-
-#### Overview
-
-# OCR Pipeline
-
-#### Module Overview
-
-This file provides the documentation for the OCR (Optical Character Recognition) pipeline, a robust solution for extracting structured text from documents using Python and the Google Gemini Vision API. The pipeline is designed to handle various image formats and PDF files, preprocess images for optimal OCR accuracy, detect text regions, extract text using Gemini Vision, and post-process the extracted text for better readability and structure.
-
-#### Dependencies
-
-- Python 3.8+
-- OpenCV
-- Pillow
-- pdf2image
-- Google Gemini Vision API
-- pyspellchecker (optional)
-- Poppler (for PDF processing)
 
 #### Classes
 
@@ -194,46 +157,116 @@ extract_emails: True
 - Adjust `batch_size` in `config.py` to avoid rate limiting by the Gemini API.
 - Use `--log-level DEBUG` for detailed logging during troubleshooting.
 
-### ocr_pipeline/__init__.py
+### ocr_pipeline/README.md
 
 #### Overview
 
-# OCR Pipeline Module
+# OCR Pipeline
 
 #### Module Overview
 
-The `ocr_pipeline` module provides a comprehensive OCR (Optical Character Recognition) pipeline using Python and the Gemini Vision API for document text extraction. It supports multiple formats (JPG, PNG, PDF), includes advanced image preprocessing with OpenCV, detects text regions using contour analysis, performs OCR with the Gemini Vision API, and applies post-processing for regex and spell correction, ultimately generating structured JSON output.
+This file documents a production-quality OCR pipeline that processes documents (images or PDFs) and extracts structured text using a multi-stage process.
 
 #### Dependencies
 
-- `opencv-python` for image preprocessing
-- `google-cloud-vision` for OCR via Gemini Vision API
-- `json` for structured output
+- `Pillow`: Image handling
+- `OpenCV`: Image processing
+- `pdf2image`: PDF to image conversion
+- `Google Gemini Vision API`: OCR
+- `Poppler`: PDF processing (required for PDF support)
 
 #### Classes
 
 | Class | Purpose | Key Methods |
 | --- | --- | --- |
-| `ImagePreprocessor` | Preprocesses images for better OCR results | `preprocess_image` |
-| `TextDetector` | Detects text regions in images | `detect_text_regions` |
-| `GeminiOCR` | Interface for OCR using Gemini Vision API | `perform_ocr` |
-| `TextPostProcessor` | Post-processes OCR results | `correct_spelling`, `format_output` |
+| `OCRPipeline` | Main pipeline class | `process_file`, `process_image` |
+| `ImagePreprocessor` | Image preprocessing | `preprocess` |
+| `TextDetector` | Text region detection | `detect` |
+| `GeminiOCR` | OCR using Gemini Vision | `extract_text_from_regions` |
 
 #### Functions
 
 | Function | Parameters | Returns | Description |
 | --- | --- | --- | --- |
-| `get_config` | `config_type` | Configuration object | Retrieves configuration settings |
+| `main` | `args` (command-line arguments) | None | Entry point for CLI usage |
+| `process_file` | `file_path`, `output_path` | `dict` | Processes a file and saves results |
+| `preprocess` | `image` | `processed_image` | Preprocesses an image |
+| `detect` | `processed_image` | `regions` | Detects text regions |
+| `extract_text_from_regions` | `processed_image`, `regions` | `extracted_text` | Extracts text from regions |
 
 #### Configuration
 
-- `PipelineConfig`: Configuration settings for the OCR pipeline.
+All settings are in `config.py`. Key configurations:
+```python
+# Gemini API
+model_name: "gemini-1.5-flash"
+temperature: 0.1
 
-#### Notes / Edge Cases
+# Preprocessing
+use_grayscale: True
+enhance_contrast: True  # CLAHE
 
-- Ensure that input files are in supported formats (JPG, PNG, PDF).
-- Handle exceptions for invalid file formats or API errors gracefully.
-- Consider edge cases where text regions are not detected accurately; implement fallback mechanisms if necessary.
+# Text Detection
+method: "contour"  # or "east"
+min_text_height: 10
+
+# OCR Processing
+batch_size: 10
+use_batching: True
+enable_caching: True
+
+# Post-processing
+extract_dates: True
+extract_emails: True
+```
+
+#### Notes
+
+- Ensure Poppler is installed and added to PATH for PDF processing.
+- Set `GEMINI_API_KEY` environment variable or pass it as a command-line argument.
+- Use `--log-level DEBUG` for detailed logging during troubleshooting.
+
+### ocr_pipeline/__init__.py
+
+#### Overview
+
+# Module Overview
+
+This file initializes the `ocr_pipeline` package, which provides a comprehensive pipeline for optical character recognition (OCR) using Python and the Gemini Vision API. It orchestrates multi-format document processing, advanced image preprocessing, text region detection, OCR, and post-processing to deliver structured JSON output.
+
+# Dependencies
+
+| Import | Purpose |
+| --- | --- |
+| `from.config` | Configuration settings and pipeline configuration. |
+| `from.preprocess` | Image preprocessing utilities. |
+| `from.text_detector` | Text region detection logic. |
+| `from.gemini_ocr` | Integration with the Gemini Vision API for OCR. |
+| `from.postprocess` | Post-processing for text correction and formatting. |
+| `from.utils` | Shared utility functions. |
+
+# Classes
+
+| Class | Purpose | Key Methods |
+| --- | --- | --- |
+| `ImagePreprocessor` | Preprocesses images for better OCR results. | `preprocess_image` |
+| `TextDetector` | Detects text regions in images. | `detect_text_regions` |
+| `GeminiOCR` | Interface for the Gemini Vision OCR API. | `perform_ocr` |
+| `TextPostProcessor` | Post-processes OCR results for corrections. | `correct_text`, `format_output` |
+
+# Functions
+
+| Function | Parameters | Returns | Description |
+| --- | --- | --- | --- |
+| `get_config` | `config_name` | `config_value` | Retrieves configuration settings. |
+| `shared_utility_function` | Varies | Varies | Utility function for shared tasks. |
+
+# Notes
+
+- The `ocr_pipeline` package is designed to be modular, allowing individual components to be updated or replaced without affecting the entire pipeline.
+- Always ensure that the input documents are in supported formats (JPG, PNG, PDF) for consistent processing.
+- The `GeminiOCR` class requires valid API credentials for the Gemini Vision service to function correctly.
+- The `TextPostProcessor` class uses regex and spell correction to refine OCR outputs, which can be customized further as needed.
 
 ### ocr_pipeline/config.py
 
@@ -243,73 +276,59 @@ The `ocr_pipeline` module provides a comprehensive OCR (Optical Character Recogn
 
 #### Module Overview
 
-The `config.py` file serves as the configuration file for the OCR Pipeline, providing all configurable settings for the OCR system. It defines various classes and functions to manage the configuration settings, ensuring that the pipeline can be customized and validated according to the user's requirements.
+This file defines the configuration settings for the OCR pipeline, allowing customization of various components like API keys, preprocessing methods, and post-processing rules.
 
 #### Dependencies
 
-| Dependency | Purpose |
-|------------|---------|
-| `os` | Provides a way of using operating system dependent functionality. |
-| `Path` from `pathlib` | Provides an object-oriented interface for working with filesystem paths. |
-| `dataclass` from `dataclasses` | A decorator that automatically adds special methods to classes to store values. |
-| `Optional` from `typing` | A type hint indicating that a variable can be of a specified type or `None`. |
-| `dotenv` | A Python library to load environment variables from a `.env` file. |
+| Import | Purpose |
+| ------ | ------- |
+| `os` | Provides a way to interact with the operating system. |
+| `Path` from `pathlib` | Facilitates path manipulations. |
+| `dataclass` from `dataclasses` | Simplifies the creation of classes that are primarily used to store data. |
+| `Optional` from `typing` | Used for type hinting. |
+| `load_dotenv` from `dotenv` | Loads environment variables from a `.env` file. |
+| `create_directory` from `ocr_pipeline.utils` | Ensures the existence of a directory. |
 
 #### Classes
 
 | Class | Purpose | Key Methods |
-|-------|---------|-------------|
+| ----- | ------- | ----------- |
 | `GeminiConfig` | Configuration for Google Gemini API. | `__post_init__` |
 | `PreprocessingConfig` | Configuration for image preprocessing. | None |
 | `TextDetectorConfig` | Configuration for text detection. | None |
 | `OCRConfig` | Configuration for OCR processing. | None |
 | `PostProcessConfig` | Configuration for post-processing. | None |
-| `PipelineConfig` | Main pipeline configuration. | `__init__` |
+| `PipelineConfig` | Main pipeline configuration. | `__post_init__` |
 
 #### Functions
 
 | Function | Parameters | Returns | Description |
-|----------|-----------|---------|-------------|
+| -------- | ---------- | ------- | ----------- |
 | `get_config` | None | `PipelineConfig` | Returns the global pipeline configuration. |
-| `validate_config` | None | `bool` | Validates the configuration settings and prints warnings if necessary. |
+| `validate_config` | None | `bool` | Validates the configuration settings. |
 
-#### Configuration
+#### Notes
 
-The `config` object is an instance of `PipelineConfig` that holds all the configuration settings for the OCR pipeline. It is initialized with default values and can be customized by modifying the respective class attributes.
-
-#### Notes / Edge Cases
-
-- If the `python-dotenv` library is not installed, the environment variables will not be loaded from the `.env` file, and the system environment variables will be used instead.
-- The `validate_config` function checks for the presence of the `GEMINI_API_KEY` and ensures that the output directory exists. If either check fails, a warning message is printed.
+- The `PipelineConfig` class initializes the output directory by calling `create_directory`.
+- The `GeminiConfig` class sets the `api_key` from the environment variable if not provided.
+- Ensure the `.env` file is present if using `dotenv` for local development.
+- The `validate_config` function checks for essential settings like the Gemini API key and output directory.
 
 ### ocr_pipeline/gemini_ocr.py
 
 #### Overview
 
-# `ocr_pipeline/gemini_ocr.py` Documentation
+# Module Overview
 
-#### Module Overview
-
-This module, `gemini_ocr.py`, is designed to handle Optical Character Recognition (OCR) using the Google Gemini Vision API. It is a critical component of the OCR pipeline, responsible for extracting text from detected regions within images. The module incorporates features such as batching, caching, and error handling to ensure efficient and reliable text extraction.
+This file implements the core OCR functionality using Google's Gemini Vision API. It handles text extraction from detected regions in images, with features like batching, caching, and error handling.
 
 #### Dependencies
 
-- `base64`
-- `io`
-- `hashlib`
-- `json`
-- `os`
-- `time`
-- `logging`
-- `typing`
-- `dataclasses`
-- `concurrent.futures`
-- `cv2`
-- `numpy`
-- `google.generativeai`
-- `google.api_core.exceptions`
-- `config` (custom module)
-- `text_detector` (custom module)
+- `base64`, `io`, `hashlib`, `json`, `os`, `time`, `logging`: Standard library modules for various utilities.
+- `cv2`: OpenCV for image processing.
+- `numpy`: For numerical operations on image data.
+- `google.generativeai`, `google.api_core.exceptions`: Google Gemini Vision API client and exception handling.
+- `ocr_pipeline.config`, `ocr_pipeline.text_detector`, `ocr_pipeline.utils`: Internal modules for configuration, text region detection, and utility functions.
 
 #### Classes
 
@@ -326,51 +345,45 @@ This module, `gemini_ocr.py`, is designed to handle Optical Character Recognitio
 
 #### Configuration
 
-- `GeminiConfig`: Configuration for Gemini API.
-- `OCRConfig`: Configuration for OCR processing.
+- `GeminiConfig`: Configuration for Gemini API, including `api_key`, `temperature`, `max_output_tokens`, and `model_name`.
+- `OCRConfig`: Configuration for OCR processing, including `enable_caching`, `cache_dir`, `use_batching`, `batch_size`, `use_multiprocessing`, and `max_workers`.
 
-#### Constants
+#### Notes
 
-None
-
-#### Notes / Edge Cases
-
-- Ensure `GEMINI_API_KEY` is set either in the configuration or as an environment variable.
-- Caching is optional and can be disabled via configuration.
+- Caching is enabled by default and stores results in JSON files within the specified `cache_dir`.
+- Batching and multiprocessing are configurable and can be enabled/disabled via `OCRConfig`.
 - Error handling includes retries with exponential backoff for rate limiting and other API errors.
-- Batch processing and multiprocessing are configurable for efficiency.
+- The `_process_batched` method uses parallel processing within each batch for efficiency.
 
 ### ocr_pipeline/main.py
 
 #### Overview
 
-# `ocr_pipeline/main.py` Documentation
+# Module Overview
 
-#### Module Overview
-
-This file serves as the main entry point for the OCR pipeline, orchestrating the complete process of document text extraction using Gemini Vision. It handles document loading, preprocessing, text region detection, OCR extraction, and postprocessing, culminating in structured output.
+This file is the main entry point for the OCR pipeline, orchestrating the complete process of loading a document, preprocessing, text detection, OCR extraction, and postprocessing. It provides a command-line interface for running the pipeline on input files.
 
 #### Dependencies
 
-- `argparse`: For parsing command-line arguments.
-- `logging`: For logging events and errors.
-- `sys`: For system-specific parameters and functions.
-- `time`: For timing the processing stages.
-- `pathlib`: For handling file paths.
-- `typing`: For type hints.
-- `json`: For handling JSON data.
-- `config`: For configuration settings.
-- `preprocess`: For image preprocessing.
-- `text_detector`: For text region detection.
-- `gemini_ocr`: For OCR extraction using Gemini Vision.
-- `postprocess`: For postprocessing OCR results.
-- `utils`: For utility functions.
+- `argparse`: Command-line argument parsing.
+- `logging`: Logging setup and management.
+- `sys`: System-specific parameters and functions.
+- `time`: Time-related functions for measuring processing time.
+- `pathlib`: Object-oriented filesystem paths.
+- `typing`: Type hints.
+- `json`: JSON encoding and decoding.
+- `config`: Configuration management for the pipeline.
+- `preprocess`: Image preprocessing utilities.
+- `text_detector`: Text region detection utilities.
+- `gemini_ocr`: OCR extraction using Gemini Vision.
+- `postprocess`: Postprocessing of OCR results.
+- `utils`: Miscellaneous utility functions.
 
 #### Classes
 
 | Class | Purpose | Key Methods |
 | --- | --- | --- |
-| `OCRPipeline` | Manages the OCR pipeline flow. | `__init__`, `process_file`, `process_image_only` |
+| `OCRPipeline` | Manages the complete OCR process. | `__init__`, `process_file`, `process_image_only` |
 
 #### Functions
 
@@ -381,175 +394,154 @@ This file serves as the main entry point for the OCR pipeline, orchestrating the
 
 #### Configuration
 
-Configuration settings are managed through the `config` module, which includes:
-- `PipelineConfig`
-- `GeminiConfig`
-- `PreprocessingConfig`
-- `TextDetectorConfig`
-- `OCRConfig`
-- `PostProcessConfig`
+- Configuration is managed through the `config` module, with specific configurations for preprocessing, text detection, OCR, and postprocessing.
+- Command-line arguments can override default configurations.
 
 #### Constants
 
-None
+- None
 
-#### Notes / Edge Cases
+#### Notes
 
 - Ensure the Gemini API key is properly configured either through the environment variable `GEMINI_API_KEY` or via the `--api-key` command-line argument.
-- Supported input file formats are JPG, PNG, and PDF.
-- If the `--full-image` flag is used, the pipeline will process the entire image without detecting text regions, which is faster but may be less accurate.
-- Preview windows can be shown at each stage using the `--preview` flag.
-- Preprocessed images can be saved using the `--save-preprocessed` flag.
+- The pipeline supports both image and PDF inputs.
+- Preprocessed images can be saved and previews can be shown if the respective command-line flags are used.
+- Results can be saved in JSON or displayed on stdout.
+- The pipeline can run in a simplified mode (`--full-image`) which processes the entire image without region detection for faster but less accurate results.
 
 ### ocr_pipeline/postprocess.py
 
 #### Overview
 
 # Module Overview
-
-The `postprocess.py` module is responsible for cleaning and structuring the output from the OCR (Optical Character Recognition) process. This module enhances the raw OCR results by applying various post-processing techniques such as regex-based pattern extraction, spell correction, artifact removal, and line reconstruction. The goal is to produce a more readable and structured text output that can be easily consumed by downstream applications.
+This file post-processes OCR results to clean and structure the extracted text. It uses regex, spell correction, and other techniques to improve the quality of OCR output.
 
 #### Dependencies
 
 - `re`: For regex operations.
 - `json`: For JSON serialization.
-- `logging`: For logging messages.
-- `typing`: For type hints.
-- `dataclasses`: For defining data classes.
-- `collections`: For using `defaultdict`.
-- `config`: For configuration settings.
-- `spellchecker`: Optional dependency for spell checking.
-- `gemini_ocr`: For OCR result objects.
+- `logging`: For logging.
+- `dataclass`: For defining `StructuredOutput`.
+- `defaultdict`: For default dictionaries.
+- `PostProcessConfig` and `get_config` from `config`: For configuration.
+- `SpellChecker` from `spellchecker`: For optional spell checking.
+- `OCRResult` from `gemini_ocr`: For handling OCR results.
 
 #### Classes
 
 | Class | Purpose | Key Methods |
 | --- | --- | --- |
-| `StructuredOutput` | Represents structured output from OCR. | `__post_init__`, `to_dict`, `to_json` |
-| `TextPostProcessor` | Post-processes OCR text output. | `__init__`, `_compile_patterns`, `process`, `process_single`, `clean_text`, `_remove_artifacts`, `_normalize_whitespace`, `_remove_extra_spaces`, `_spell_check`, `_reconstruct_lines`, `extract_structured_info`, `create_structured_output` |
+| `StructuredOutput` | Represents structured OCR output. | `to_dict`, `to_json` |
+| `TextPostProcessor` | Post-processes OCR text. | `process`, `clean_text`, `extract_structured_info`, `create_structured_output` |
 
 #### Functions
 
 | Function | Parameters | Returns | Description |
 | --- | --- | --- | --- |
-| `postprocess_ocr_results` | `ocr_results: List[OCRResult]` | `str` | Post-processes a list of OCR results and returns the cleaned text. |
+| `postprocess_ocr_results` | `ocr_results: List[OCRResult]` | `StructuredOutput` | Post-processes a list of OCR results and returns structured output. |
 
 #### Configuration
 
-- `PostProcessConfig`: Configuration settings for post-processing.
-  - `enable_spell_check`: Boolean to enable/disable spell checking.
-  - `spellcheck_language`: Language for spell checking.
-  - `remove_artifacts`: Boolean to enable/disable artifact removal.
-  - `normalize_whitespace`: Boolean to enable/disable whitespace normalization.
-  - `remove_extra_spaces`: Boolean to enable/disable extra space removal.
-  - `reconstruct_lines`: Boolean to enable/disable line reconstruction.
+- `PostProcessConfig`: Contains settings for post-processing, including spell checking, artifact removal, and line reconstruction.
 
 #### Constants
 
-- `SPELLCHECKER_AVAILABLE`: Boolean indicating whether the `pyspellchecker` module is available.
+- `SPELLCHECKER_AVAILABLE`: Boolean indicating if `pyspellchecker` is installed.
 
-#### Notes / Edge Cases
+#### Notes
 
-- Spell checking is optional and depends on the availability of the `pyspellchecker` module.
-- Aggressive artifact removal may need tuning based on the specific OCR engine and document types.
-- Regex patterns for date, email, phone, currency, and URL extraction are predefined and may need customization for specific use cases.
+- Spell checking is optional and requires `pyspellchecker`.
+- Regex patterns for dates, emails, phones, currency, and URLs are precompiled for efficiency.
+- Aggressive artifact removal may need tuning for specific use cases.
+- Spell checking is applied only to words that are mostly alphabetic.
+- Line reconstruction aims to preserve meaningful line breaks while removing extraneous ones.
+- Structured output includes raw text, cleaned text, and extracted entities like emails, phones, URLs, and currency.
 
 ### ocr_pipeline/preprocess.py
 
 #### Overview
 
-# `ocr_pipeline/preprocess.py` Documentation
+# `ocr_pipeline/preprocess.py`
 
-#### Module Overview
-
-This module provides image preprocessing operations for the OCR pipeline. It utilizes OpenCV to enhance image quality, making text recognition more accurate. The preprocessing steps include grayscale conversion, noise removal, thresholding, deskewing, contrast enhancement, and resizing.
+This file contains the image preprocessing module for our OCR pipeline. It handles various image enhancement techniques to improve text recognition accuracy.
 
 #### Dependencies
 
-- `cv2` (OpenCV)
-- `numpy`
-- `typing`
-- `pathlib`
-- `logging`
-- `config` (custom module for configuration)
+- `cv2`: OpenCV library for image processing operations.
+- `numpy`: For numerical operations on image arrays.
+- `typing`: For type hints.
+- `pathlib`: For handling file paths.
+- `logging`: For logging preprocessing steps.
+- `config`: Custom module for loading configuration.
 
 #### Classes
 
-| Class | Purpose | Key Methods |
-| --- | --- | --- |
-| `ImagePreprocessor` | Handles all image preprocessing operations for OCR. | `__init__`, `preprocess`, `to_grayscale`, `remove_noise`, `apply_thresholding`, `enhance_contrast_clahe`, `detect_skew_angle`, `deskew`, `resize_for_ocr` |
+| Class              | Purpose                                                                                     | Key Methods                                                                                     |
+|--------------------|---------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|
+| `ImagePreprocessor` | Handles all image preprocessing operations for OCR, providing a suite of image enhancement techniques. | `preprocess`, `to_grayscale`, `remove_noise`, `apply_thresholding`, `enhance_contrast_clahe`, `detect_skew_angle`, `deskew`, `resize_for_ocr` |
 
 #### Functions
 
-| Function | Parameters | Returns | Description |
-| --- | --- | --- | --- |
-| `preprocess_image` | `image_path: Union[str, Path]`, `output_path: Optional[Union[str, Path]] = None`, `config: Optional[PreprocessingConfig] = None` | `np.ndarray` | Convenience function to preprocess an image from file. |
-| `preprocess_image_bytes` | `image_bytes: bytes`, `config: Optional[PreprocessingConfig] = None` | `np.ndarray` | Preprocess an image from bytes. |
+| Function                  | Parameters                                                                                       | Returns             | Description                                                                                       |
+|---------------------------|--------------------------------------------------------------------------------------------------|---------------------|---------------------------------------------------------------------------------------------------|
+| `preprocess_image`        | `image_path: Union[str, Path]`, `output_path: Optional[Union[str, Path]] = None`, `config: Optional[PreprocessingConfig] = None` | `np.ndarray`        | Convenience function to preprocess an image from file.                                             |
+| `preprocess_image_bytes`  | `image_bytes: bytes`, `config: Optional[PreprocessingConfig] = None`                             | `np.ndarray`        | Preprocess an image from bytes.                                                                   |
 
 #### Configuration
 
-- `PreprocessingConfig` (custom configuration class)
-  - `use_grayscale: bool`
-  - `denoise_method: str`
-  - `denoise_strength: int`
-  - `enhance_contrast: bool`
-  - `threshold_method: str`
-  - `threshold_value: int`
-  - `clahe_clip_limit: float`
-  - `clahe_grid_size: int`
-  - `enable_deskew: bool`
-  - `deskew_angle_threshold: float`
-  - `max_dimension: int`
+- `PreprocessingConfig`: Configuration class for preprocessing parameters.
+  - `use_grayscale`: Boolean to enable/disable grayscale conversion.
+  - `denoise_method`: Method for noise removal (`gaussian`, `bilateral`, `median`).
+  - `denoise_strength`: Strength parameter for noise removal.
+  - `enhance_contrast`: Boolean to enable/disable contrast enhancement.
+  - `clahe_clip_limit`: Clip limit for CLAHE contrast enhancement.
+  - `clahe_grid_size`: Grid size for CLAHE contrast enhancement.
+  - `threshold_method`: Method for thresholding (`simple`, `adaptive`, `otsu`).
+  - `threshold_value`: Value for simple thresholding.
+  - `enable_deskew`: Boolean to enable/disable deskewing.
+  - `deskew_angle_threshold`: Angle threshold for deskewing.
+  - `max_dimension`: Maximum dimension for image resizing.
 
-#### Notes / Edge Cases
+#### Notes
 
-- Ensure the input image is in BGR format when using OpenCV functions.
-- The module logs preprocessing steps for debugging purposes.
-- The `preprocess` method applies the full preprocessing pipeline in sequence.
-- Noise removal and thresholding methods are configurable.
-- Deskewing is conditional based on the detected skew angle.
-- Resizing is applied if the image dimensions exceed the configured maximum dimension.
+- Ensure OpenCV is properly installed and configured.
+- Configuration parameters are loaded from `config.py`.
+- Logging is used extensively to track preprocessing steps and debug issues.
+- Image resizing maintains aspect ratio to avoid distortion.
+- Deskewing is only applied if the detected skew angle exceeds the configured threshold.
 
 ### ocr_pipeline/rag_app.py
 
 #### Overview
 
-# `ocr_pipeline/rag_app.py` Documentation
+# Module Overview
+This file implements a Streamlit app for a document Q&A system. It allows users to upload PDF documents, extracts text using OCR, stores chunks in ChromaDB for semantic search, and answers questions using Gemini.
 
-#### Module Overview
+# Dependencies
+- `streamlit`: Framework for building the web app.
+- `chromadb`: Vector database for storing document chunks and embeddings.
+- `google.generativeai`: Gemini API for text embeddings and generation.
+- `config`, `preprocess`, `text_detector`, `gemini_ocr`, `postprocess`, `utils`: Custom modules for configuration, preprocessing, text detection, OCR, postprocessing, and utility functions.
 
-This file implements a Retrieval Augmented Generation (RAG) application using Streamlit. The app allows users to upload PDF documents, extracts text using an OCR pipeline, stores the text in ChromaDB for semantic search, and answers questions about the document using the Gemini model.
-
-#### Dependencies
-
-- `streamlit`: For building the web application.
-- `chromadb`: For storing document chunks and performing semantic search.
-- `google.generativeai`: For interacting with the Gemini model.
-- `config`: Custom configuration module.
-- `preprocess`, `text_detector`, `gemini_ocr`, `postprocess`, `utils`: Custom modules for preprocessing, text detection, OCR, postprocessing, and utility functions.
-
-#### Classes
-
+# Classes
 | Class | Purpose | Key Methods |
 | --- | --- | --- |
 | `DocumentRAG` | Document Q&A system using ChromaDB and Gemini. | `__init__`, `_setup_gemini`, `get_embeddings`, `process_document`, `_split_into_chunks`, `query`, `get_document_summary` |
 
-#### Functions
-
+# Functions
 | Function | Parameters | Returns | Description |
 | --- | --- | --- | --- |
-| `main` | None | None | Streamlit application entry point. Handles document upload, processing, and querying. |
+| `main` | None | None | Streamlit application entry point. Handles UI, document upload, processing, and querying. |
 
-#### Configuration
+# Configuration
+- Configuration is loaded from `config` module.
+- Gemini API key is either read from config or environment variable `GEMINI_API_KEY`.
 
-Configuration is managed through the `config` module, which is imported at the beginning of the file.
-
-#### Notes / Edge Cases
-
-- The Gemini API key must be configured either in the config file or as an environment variable.
-- The ChromaDB collection is reset each time the app is run to ensure a clean state.
-- The document text is split into chunks for better retrieval performance. If chunks are too small, they are merged based on sentence boundaries.
-- The app uses Streamlit's session state to persist the RAG instance and document information across reruns.
+# Notes
+- The app uses an in-memory ChromaDB instance, suitable for Streamlit's ephemeral nature.
+- Document chunks are split into paragraphs or sentences to optimize retrieval.
+- The app stores processed document info in Streamlit's session state for persistence across reruns.
+- Error handling is minimal; consider adding more robust error reporting and user feedback.
 
 ### ocr_pipeline/requirements.txt
 
@@ -557,37 +549,40 @@ Configuration is managed through the `config` module, which is imported at the b
 
 # OCR Pipeline Requirements
 
-This file lists the dependencies required to run the OCR (Optical Character Recognition) pipeline. It ensures that all necessary libraries and packages are installed and up-to-date to support the various functionalities of the pipeline, including image processing, PDF handling, and integration with Google's generative AI services.
+This file lists the dependencies required to run the OCR pipeline. It ensures that all necessary libraries are installed and at the correct versions to avoid compatibility issues.
 
 #### Dependencies
 
-| Dependency | Version | Purpose |
+| Dependency | Purpose | Version |
 |------------|---------|---------|
-| opencv-python-headless | >=4.8.0 | Core computer vision library for image processing |
-| numpy | >=1.24.0 | Fundamental package for scientific computing with Python |
-| Pillow | >=10.0.0 | Library for opening, manipulating, and saving many different image file formats |
-| pdf2image | >=1.16.0 | Convert PDF files to images |
-| poppler-utils | >=0.41.0 | Utilities for working with PDF files |
-| google-generativeai | >=0.3.0 | Google's generative AI library for advanced text generation |
-| scipy | >=1.10.0 | Library used for scientific and technical computing |
-| scikit-image | >=0.21.0 | Library for image processing |
-| python-multipart | >=0.0.6 | Library for handling multipart form data |
-| python-dotenv | >=1.0.0 | Load environment variables from a `.env` file |
-| tqdm | >=4.65.0 | Library for progress bar |
-| pyspellchecker | >=0.7.0 | Spell checking library |
-| typing-extensions | >=4.5.0 | Additional type hints for Python |
-| pypdf | >=3.9.0 | Library for reading and writing PDF files |
-| streamlit | >=1.28.0 | Library for creating interactive web apps |
-| chromadb | >=0.4.22 | Database for document querying and management |
+| opencv-python-headless | Computer vision library for image processing | >=4.8.0 |
+| numpy | Numerical computing library | >=1.24.0 |
+| Pillow | Library for opening, manipulating, and saving many different image file formats | >=10.0.0 |
+| pdf2image | Converts PDF files to images | >=1.16.0 |
+| poppler-utils | Utilities for working with PDF files | >=0.41.0 |
+| google-generativeai | Google's generative AI library | >=0.3.0 |
+| scipy | Library used for scientific and technical computing | >=1.10.0 |
+| scikit-image | Image processing library | >=0.21.0 |
+| python-multipart | Multipart form data parser | >=0.0.6 |
+| python-dotenv | Loads environment variables from a `.env` file | >=1.0.0 |
+| tqdm | Progress bar library | >=4.65.0 |
+| pyspellchecker | Spell checking library | >=0.7.0 |
+| typing-extensions | Additional type hints | >=4.5.0 |
+| pypdf | Library for working with PDF files | >=3.9.0 |
+| streamlit | Web application framework | >=1.28.0 |
+| chromadb | Database for storing and querying documents | >=0.4.22 |
 
-#### Notes / Edge Cases
+#### Functions
 
-- Ensure that the versions of `opencv-python-headless`, `numpy`, and `scikit-image` are compatible to avoid any runtime errors.
-- The `google-generativeai` library requires an active internet connection for its functionalities.
-- The `pypdf` library should be used with caution to avoid any issues with encrypted PDF files.
-- The `streamlit` application may require additional configuration for deployment in different environments.
+| Function | Parameters | Returns | Description |
+|----------|------------|---------|-------------|
+| `functionName` | `param1`, `param2` | `returnType` | Brief description of what the function does. |
 
-This documentation provides a comprehensive overview of the dependencies required for the OCR pipeline, ensuring smooth operation and integration of various components.
+#### Notes
+
+- Ensure all dependencies are compatible with the current Python version used in the project.
+- Some dependencies might have specific system requirements (e.g., `opencv-python-headless` requires a headless environment).
+- Regularly check for updates to these dependencies to avoid breaking changes.
 
 ### ocr_pipeline/text_detector.py
 
@@ -597,41 +592,46 @@ This documentation provides a comprehensive overview of the dependencies require
 
 #### Module Overview
 
-This module is responsible for detecting text regions within document images as part of the OCR (Optical Character Recognition) pipeline. It employs two primary methods for text detection: contour-based detection and the EAST (Efficient and Accurate Scene Text Detector) method. The module returns bounding boxes of detected text regions, which are then used for further OCR processing.
+This file contains the text detection module for the OCR pipeline. It identifies text regions in document images using contour-based detection or the EAST text detector. The detected text regions are returned as bounding boxes for further OCR processing.
 
 #### Dependencies
 
-- `cv2` (OpenCV): For image processing operations.
-- `numpy`: For numerical operations on image data.
-- `typing`: For type hints.
-- `dataclasses`: For defining data classes.
-- `logging`: For logging information.
-- `os`: For file path operations.
-- `config`: Custom module for configuration settings.
+- `cv2`: OpenCV library for image processing.
+- `numpy`: Numerical operations on arrays.
+- `typing`: Type hints for function parameters and return types.
+- `dataclasses`: Data class decorator for `TextRegion`.
+- `logging`: Logging module for informational and warning messages.
+- `os`: Operating system interface for file path operations.
+- `ocr_pipeline.config`: Configuration module for text detector settings.
+- `ocr_pipeline.utils`: Utility functions for region manipulation.
 
 #### Classes
 
 | Class | Purpose | Key Methods |
 | --- | --- | --- |
-| `TextRegion` | Represents a detected text region. | `to_dict()` |
-| `TextDetector` | Detects text regions in document images. | `detect()`, `_detect_with_contours()`, `_detect_with_east()`, `_merge_overlapping_regions()`, `crop_region()`, `draw_regions()` |
+| `TextRegion` | Represents a detected text region. | `x`, `y`, `w`, `h`, `area`, `aspect_ratio`, `to_dict` |
+| `TextDetector` | Detects text regions in document images. | `__init__`, `detect`, `_detect_with_contours`, `_detect_with_east`, `_decode_east_detections` |
 
 #### Functions
 
 | Function | Parameters | Returns | Description |
 | --- | --- | --- | --- |
-| `TextRegion.to_dict()` | None | `Dict[str, Any]` | Converts the `TextRegion` object to a dictionary. |
+| `detect_text_regions` | `image: np.ndarray`, `method: str = "contour"`, `config: Optional[TextDetectorConfig] = None` | `List[TextRegion]` | Convenience function to detect text regions using specified method and configuration. |
 
 #### Configuration
 
-The module relies on a configuration object `TextDetectorConfig` to set various parameters such as detection method, minimum and maximum text dimensions, aspect ratio thresholds, and EAST model path. The configuration is loaded using `get_config().text_detector`.
+- `TextDetectorConfig`: Configuration settings for the text detector, including detection method, contour parameters, and EAST model path.
 
-#### Notes / Edge Cases
+#### Constants
 
-- The contour-based detection method is the default and does not require any external models.
-- The EAST method requires a pre-trained model file, which must be specified in the configuration.
-- Overlapping text regions are merged to reduce redundancy.
-- The module logs information about the detection process for debugging purposes.
+- None
+
+#### Notes
+
+- The `_detect_with_contours` method uses morphological operations and contour analysis to detect text regions. It applies filters based on size and aspect ratio to refine detections.
+- The `_detect_with_east` method requires the EAST model file to be available at the specified path. If the model is not found, it falls back to contour-based detection.
+- Overlapping text regions detected by contours are merged using the `merge_regions` utility function.
+- The `detect_text_regions` function is a convenience wrapper that initializes the `TextDetector` and calls the `detect` method with the specified configuration.
 
 ### ocr_pipeline/utils.py
 
@@ -639,22 +639,18 @@ The module relies on a configuration object `TextDetectorConfig` to set various 
 
 # Module Overview
 
-The `ocr_pipeline/utils.py` file contains utility functions and classes that support the OCR pipeline. These utilities handle common tasks such as file handling, image loading and conversion, PDF processing, logging setup, and JSON operations. The purpose of this module is to provide reusable functions and classes that can be leveraged across different components of the OCR pipeline, ensuring consistency and reducing code duplication.
+This file provides utility functions and classes for common tasks in the OCR Pipeline, including file handling, image processing, PDF operations, logging setup, and JSON handling.
 
 #### Dependencies
 
-- `os`
-- `io`
-- `json`
-- `logging`
-- `hashlib`
-- `pathlib`
-- `typing`
-- `dataclasses`
-- `cv2` (OpenCV)
-- `numpy` as `np`
-- `PIL` (Python Imaging Library)
-- `pdf2image` (for PDF operations)
+- `os`, `io`, `json`, `logging`, `hashlib`: Standard library modules for OS operations, I/O, JSON handling, logging, and hashing.
+- `pathlib.Path`: For path handling.
+- `typing`: For type hints.
+- `dataclasses.asdict`: For converting dataclasses to dictionaries.
+- `cv2`: OpenCV for image processing.
+- `numpy as np`: For numerical operations.
+- `PIL.Image`: Pillow for image operations.
+- `pdf2image`: For PDF to image conversion.
 
 #### Classes
 
@@ -669,28 +665,17 @@ The `ocr_pipeline/utils.py` file contains utility functions and classes that sup
 
 | Function | Parameters | Returns | Description |
 | --- | --- | --- | --- |
-| `setup_logging` | `level: str = "INFO"`, `log_file: Optional[str] = None` | None | Setup logging configuration. |
+| `setup_logging` | `level: str`, `log_file: Optional[str]` | None | Setup logging configuration. |
 | `get_logger` | `name: str` | `logging.Logger` | Get a logger instance. |
 | `load_document` | `path: Union[str, Path]` | `List[np.ndarray]` | Load a document (image or PDF) and return list of images. |
-| `save_ocr_results` | `results`, `output_path: Union[str, Path]`, `format: str = "json"` | None | Save OCR results to file. |
+| `save_ocr_results` | `results`, `output_path: Union[str, Path]`, `format: str` | None | Save OCR results to file. |
 | `calculate_file_hash` | `path: Union[str, Path]` | `str` | Calculate MD5 hash of a file. |
 
-#### Configuration / Constants
+#### Notes
 
-None
+- `ImageUtils.load_image` tries loading the image with OpenCV first, then falls back to PIL if OpenCV fails.
+- `ImageUtils.save_image` supports JPEG and PNG formats. JPEG quality can be adjusted.
+- `PDFUtils` requires `pdf2image` package. Install with `pip install pdf2image`.
+- `FileUtils.get_output_path` generates an output path based on input path, output directory, and optional suffix and extension.
+- `JSONUtils` provides simple methods for saving and loading JSON files.
 
-#### Notes / Edge Cases
-
-- The `load_image` method attempts to load images using both OpenCV and PIL. If OpenCV fails, it falls back to PIL.
-- The `save_image` method supports different image formats and quality settings.
-- The `pdf_to_images` method requires the `pdf2image` package. Ensure it is installed before use.
-- The `load_document` function raises a `ValueError` if the file format is unsupported.
-- The `save_ocr_results` function supports saving results in JSON and text formats.
-
-## Code Improvements Applied
-
-- Break circular dependency cycles (`ocr_pipeline/__init__.py`) to reduce cascading risk.
-- Add regression tests around the highest-risk files: `ocr_pipeline/config.py`, `ocr_pipeline/text_detector.py`, `ocr_pipeline/gemini_ocr.py`.
-- Consider extracting shared utility code into a dedicated module to lower coupling.
-- The dependency graph is not a DAG — refactoring toward a DAG structure improves build predictability.
-- Re-index and regenerate walkthroughs/diagrams after structural changes to keep documentation current.
