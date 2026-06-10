@@ -1,3 +1,4 @@
+```
 """
 Utility functions for OCR Pipeline.
 
@@ -79,19 +80,14 @@ class ImageUtils:
         if not path.exists():
             raise ValueError(f"Image not found: {path}")
 
-        # Try different loading methods
-        # First with OpenCV
         image = cv2.imread(str(path))
         if image is not None:
             return image
 
-        # Fallback to PIL
         try:
             pil_image = Image.open(path)
             if pil_image.mode == 'RGBA':
-                # Convert RGBA to RGB
                 pil_image = pil_image.convert('RGB')
-            # Convert RGB to BGR for OpenCV
             image = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
             return image
         except Exception as e:
@@ -113,13 +109,11 @@ class ImageUtils:
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
 
-        # Determine format from extension
         ext = path.suffix.lower()
 
         if ext in ['.jpg', '.jpeg']:
             return cv2.imwrite(str(path), image, [cv2.IMWRITE_JPEG_QUALITY, quality])
         elif ext == '.png':
-            # PNG doesn't support quality parameter
             return cv2.imwrite(str(path), image, [cv2.IMWRITE_PNG_COMPRESSION, 3])
         else:
             return cv2.imwrite(str(path), image)
@@ -181,7 +175,6 @@ class ImageUtils:
         if target_size:
             new_w, new_h = target_size
             if keep_aspect:
-                # Calculate scale to fit within target while preserving aspect
                 scale = min(new_w / w, new_h / h)
                 new_w = int(w * scale)
                 new_h = int(h * scale)
@@ -247,14 +240,12 @@ class PDFUtils:
         """
         try:
             from pdf2image import convert_from_path
-            from pdf2image.exceptions import PDFInfoError, PDFPageCountError
         except ImportError:
             raise ImportError(
                 "pdf2image is required for PDF processing. "
                 "Install with: pip install pdf2image"
             )
 
-        # Convert
         images = convert_from_path(
             str(pdf_path),
             dpi=dpi,
@@ -262,10 +253,8 @@ class PDFUtils:
             last_page=last_page
         )
 
-        # Convert PIL images to OpenCV format
         result = []
         for pil_image in images:
-            # Convert RGB to BGR for OpenCV
             cv_image = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
             result.append(cv_image)
 
@@ -428,3 +417,4 @@ def calculate_file_hash(path: Union[str, Path]) -> str:
             hasher.update(chunk)
 
     return hasher.hexdigest()
+```
